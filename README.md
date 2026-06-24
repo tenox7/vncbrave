@@ -87,4 +87,6 @@ The Brave Origin "free on Linux" first-run dialog is pre-accepted in the image
 the named-volume profile this carries over on first use; with an empty host
 bind mount the dialog appears once and your choice then persists.
 
+If you use this regularly, please support Brave by [One-time purchase](https://account.brave.com/?intent=checkout&product=origin).
+
 FBI recommends installation of an [ad blocker](https://www.ic3.gov/Media/Y2022/PSA221221) (Brave ships with one built in).
