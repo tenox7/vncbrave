@@ -1,0 +1,16 @@
+#!/bin/bash
+
+rm -rf /tmp/.X0-lock /tmp/.X11-unix
+while true
+do
+  pgrep -f 'X(tigervnc|vnc)' >/dev/null
+  if [[ $? -ne 0 ]];
+  then
+    vncserver :0 -geometry "${WIDTH}x${HEIGHT}" \
+                 -SecurityTypes VncAuth -localhost 0 \
+                 -xstartup /home/vncbrave/.xinitrc
+    sleep 2
+  else
+    sleep 10
+  fi
+done
