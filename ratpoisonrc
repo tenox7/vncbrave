@@ -1,0 +1,4 @@
+addhook titlechanged exec /usr/local/bin/vncdesktopname
+addhook switchwin exec /usr/local/bin/vncdesktopname
+addhook newwindow exec /usr/local/bin/vncdesktopname
+addhook deletewindow exec /usr/local/bin/vncdesktopname

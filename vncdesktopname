@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Pushes the focused window title (Brave's active tab) out as the VNC desktop
+# name, so viewers show the tab instead of the container hostname. Driven by
+# the ratpoison hooks in ~/.ratpoisonrc. An explicit DESKTOP_NAME wins.
+[[ -n $DESKTOP_NAME ]] && exit 0
+
+# %s%t prints a status char then the title; '*' marks the current window.
+title=$(ratpoison -c 'windows %s%t' | sed -n 's/^\*//p')
+
+# Force 7 bit ASCII: RFB spells the desktop name in Latin-1, UTF-8 is only a
+# TigerVNC extension, and vintage clients on old X11 cannot put anything wider
+# than ASCII in a window title. Two iconv passes because the transliteration
+# tables differ per locale - the POSIX one romanizes Cyrillic and Greek, the
+# C.UTF-8 one folds accents onto bare letters and spells out punctuation.
+# Anything neither can map turns into '?', runs of which collapse to one.
+name=$(printf '%s' "$title" |
+       iconv -c -f UTF-8 -t ISO-8859-1//TRANSLIT |
+       LC_ALL=C.UTF-8 iconv -c -f ISO-8859-1 -t ASCII//TRANSLIT |
+       tr -cd '\40-\176' | tr -s '? ' | cut -c1-80 | sed 's/^ *//;s/ *$//')
+
+# Covers no window at all, and titles that transliterate to nothing readable.
+[[ $name == *[A-Za-z0-9]* ]] || name=vncbrave
+
+vncconfig -set desktop="$name"

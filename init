@@ -7,6 +7,7 @@ do
   if [[ $? -ne 0 ]];
   then
     vncserver :0 -geometry "${WIDTH}x${HEIGHT}" \
+                 -desktop "${DESKTOP_NAME:-vncbrave}" \
                  -SecurityTypes VncAuth -localhost 0 \
                  -xstartup /home/vncbrave/.xinitrc
     sleep 2

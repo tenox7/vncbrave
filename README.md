@@ -55,6 +55,31 @@ docker run -d \
 
 The server side runs TigerVNC which allows remote resizing. Requires TigerVNC Viewer.
 
+## Desktop Name
+
+The VNC desktop name tracks the active Brave tab, so the viewer's window title
+follows whatever page you are on rather than showing a random container
+hostname. This uses the RFB `DesktopName` pseudo-encoding, so the name updates
+live on an already connected client; viewers that do not support it simply keep
+the name they got at connect time.
+
+The name is transliterated down to 7 bit ASCII and capped at 80 characters,
+because RFB spells the desktop name in Latin-1 and vintage clients on old X11
+cannot put anything wider than ASCII in a window title. Accents fold onto bare
+letters, typographic punctuation is spelled out, and Cyrillic and Greek are
+romanized, so `Zürich – Café “naïve” … ™` arrives as `Zurich - Cafe "naive"
+... (TM)`. Scripts with no transliteration, CJK and emoji among them, collapse
+to a `?`.
+
+Set `DESKTOP_NAME` to pin a static name instead, useful when running several
+containers.
+
+```sh
+-e DESKTOP_NAME=mybrowser
+```
+
+Without a window to read a title from, the name falls back to `vncbrave`.
+
 ## VNC Client
 
 It's recommended to use Tight or Tiger VNC client to reduce CPU usage and improve performance.

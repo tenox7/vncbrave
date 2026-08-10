@@ -31,6 +31,12 @@ RUN mkdir -p /etc/brave/policies/managed \
 RUN useradd -m vncbrave
 ADD xinitrc /home/vncbrave/.xinitrc
 RUN chmod +x /home/vncbrave/.xinitrc
+# Mirror the active Brave tab title into the VNC desktop name: ratpoison hooks
+# fire on every title change and hand the title to vncconfig, which pushes it
+# to connected clients via the RFB DesktopName pseudo-encoding.
+ADD ratpoisonrc /home/vncbrave/.ratpoisonrc
+ADD vncdesktopname /usr/local/bin/vncdesktopname
+RUN chmod +x /usr/local/bin/vncdesktopname
 RUN mkdir -p /home/vncbrave/.config/BraveSoftware/Brave-Origin/Default /home/vncbrave/.config/tigervnc
 # Accept the Brave Origin "free on Linux" tier (browser-level, Local State) so the
 # one-time first-run dialog is skipped.
