@@ -17,7 +17,9 @@ title=$(ratpoison -c 'windows %s%t' | sed -n 's/^\*//p')
 name=$(printf '%s' "$title" |
        iconv -c -f UTF-8 -t ISO-8859-1//TRANSLIT |
        LC_ALL=C.UTF-8 iconv -c -f ISO-8859-1 -t ASCII//TRANSLIT |
-       tr -cd '\40-\176' | tr -s '? ' | cut -c1-80 | sed 's/^ *//;s/ *$//')
+       tr -cd '\40-\176' | tr -s '? ' |
+       sed 's/Brave Origin/VNCBRAVE/g' |
+       cut -c1-80 | sed 's/^ *//;s/ *$//')
 
 # Covers no window at all, and titles that transliterate to nothing readable.
 [[ $name == *[A-Za-z0-9]* ]] || name=vncbrave
