@@ -41,7 +41,7 @@ I typically bind mount a folder exported via NFS to `/home/vncbrave/Downloads`.
 
 ## Resolution
 
-The default resolution is 1024x768. This is because I mostly work on workstations with 1280x1024 and I want a smaller window. However you can set custom resolution by using `WIDTH` and `HEIGHT` env variables.
+The **default** resolution is 1024x768. This is because I mostly work on workstations with 1280x1024 and I want a smaller window. However you can set custom resolution by using `WIDTH` and `HEIGHT` env variables.
 
 ```sh
 docker volume create vncbrave
@@ -53,36 +53,24 @@ docker run -d \
     tenox7/vncbrave:latest
 ```
 
-The server side runs TigerVNC which allows remote resizing. Requires TigerVNC Viewer.
+The server side runs TigerVNC which allows remote resizing. Requires TigerVNC compatible viewer.
+
+
 
 ## Desktop Name
 
-The VNC desktop name tracks the active Brave tab, so the viewer's window title
-follows whatever page you are on rather than showing a random container
-hostname. This uses the RFB `DesktopName` pseudo-encoding, so the name updates
-live on an already connected client; viewers that do not support it simply keep
-the name they got at connect time.
-
-The name is transliterated down to 7 bit ASCII and capped at 80 characters,
-because RFB spells the desktop name in Latin-1 and vintage clients on old X11
-cannot put anything wider than ASCII in a window title. Accents fold onto bare
-letters, typographic punctuation is spelled out, and Cyrillic and Greek are
-romanized, so `Zürich – Café “naïve” … ™` arrives as `Zurich - Cafe "naive"
-... (TM)`. Scripts with no transliteration, CJK and emoji among them, collapse
-to a `?`.
-
-Set `DESKTOP_NAME` to pin a static name instead, useful when running several
-containers.
+The VNC desktop name follows the active Brave tab title, transliterated to ASCII.
+Set `DESKTOP_NAME` to pin a static name instead.
 
 ```sh
 -e DESKTOP_NAME=mybrowser
 ```
 
-Without a window to read a title from, the name falls back to `vncbrave`.
-
 ## VNC Client
 
 It's recommended to use Tight or Tiger VNC client to reduce CPU usage and improve performance.
+
+I have developed a VNC Viewer for Vintage Unix called [TenoxVNC](https://github.com/tenox7/tenoxvnc).
 
 A collection of Tight VNC ports is available here:
 http://osarchive.org/apps/vnc/tight/ports
